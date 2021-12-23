@@ -1,7 +1,7 @@
 <template>
   <div>
 
-    <v-container>
+    <v-container :key="loading">
 
       <v-row align="center" justify="center">
 
@@ -31,7 +31,13 @@
           <!-- project card -->
           <v-card class="mx-auto" hover nuxt :to="{ name: 'project-id', params: { id: project._id }}">
 
-            <v-card-title> {{ project.title }}</v-card-title>
+            <v-img
+              height="170"
+              :src="project.imageUrl"
+            ></v-img>
+
+
+            <v-card-title> {{ project.title }} </v-card-title>
             <v-card-subtitle>{{ project.description }}</v-card-subtitle>
             <v-divider/>
 
@@ -205,14 +211,14 @@ export default {
       if (this.$refs.form.validate()) {
 
         this.$axios.post('projects/api/v1', this.projectModel)
-          .then(() => {
+          .then( () => {
 
             /*this.snackbar.text = "Nepremičnina ustvarjena"
                 this.snackbar.color = null;
                 this.snackbar.visible = true;*/
 
             //fetch again after updating
-            this.getProjects()
+
 
           })
           .catch(error => {
@@ -226,6 +232,7 @@ export default {
           })
           .finally(() => {
             this.dialog = false
+            this.getProjects()
           })
       }
     },
@@ -252,11 +259,13 @@ export default {
       this.loading = true;
 
       this.$axios.get('projects/api/v1')
-        .then(response => {
+        .then(async response => {
 
           this.projects = response.data;
 
-          for (let i in this.projects){
+
+          for (let i in this.projects) {
+
 
             this.projects[i].members = this.projects[i].members.map(member => {
 
@@ -266,15 +275,22 @@ export default {
                 lastName: this.userDict[member].lastName
               }
             })
-          }
 
+            await this.$axios.get(`images/api/v1/${this.projects[i]._id}?searchTerm=${this.projects[i].title}`)
+              .then(response => {
+                this.projects[i].imageUrl = response.data[0].imageUrl
+              })
+
+          }
         })
         .catch(error => {
           // logout if api call unAuthorized
           if (error.response && error.response.status === 401)
             this.globalUnAuthorization()
         })
-        .finally(() => this.loading = false)
+        .finally(() => {
+          this.loading = false
+        })
 
     }
   },

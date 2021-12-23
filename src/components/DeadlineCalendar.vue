@@ -57,18 +57,16 @@
   </v-card>
 </template>
 
+
+
 <script>
+
 export default {
   name: "DeadlineCalendar",
   data: () => ({
     focus: '',
     today: '2019-01-08',
-    deadlines: [
-      {id: "1", name: "RSO zagovor 1", start: "2022-01-04 14:15", projectId: "61c4580b87283c4e5b3a01cb"},
-      {id: "2", name: "RSO zagovor 2", start: "2022-01-11 14:45", projectId: "61c4580b87283c4e5b3a01cb"},
-      {id: "3", name: "RSO kolokvij", start: "2022-01-11 12:00", projectId: "61c4580b87283c4e5b3a01cb"},
-      {id: "4", name: "MAT kolokvij", start: "2022-01-13 19:00", projectId: "61c4617a87283c4e5b3a01f3"},
-    ],
+    deadlines: [],
   }),
   methods: {
     setToday() {
@@ -85,6 +83,12 @@ export default {
     this.today=Date.now()
     this.$refs.calendar.prev()
     this.setToday()
+
+    this.$axios.post('projects/api/v1/gRPC', {"projectId": this.$route.params.id})
+      .then(response => {
+        this.deadlines = response.data.deadlines
+      })
+
   }
 }
 </script>

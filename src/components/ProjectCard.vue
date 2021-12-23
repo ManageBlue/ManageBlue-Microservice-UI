@@ -236,6 +236,9 @@ export default {
           /*this.snackbar.text = "Napaka pri ustvarjanju nepremičnine"
           this.snackbar.color = "error";
           this.snackbar.visible = true;*/
+
+          console.log(error.response.data)
+
           // logout if api call unAuthorized
           if (error.response && error.response.status === 401)
             this.globalUnAuthorization()

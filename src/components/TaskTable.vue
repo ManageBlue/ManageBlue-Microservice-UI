@@ -512,7 +512,6 @@ export default {
         .then(response => {
 
           this.tasks = response.data.tasks.map(task => {
-            console.log(task)
             return {
               ...task,
               contributorDisplay: this.userDict[task.contributor].firstName + ' ' + this.userDict[task.contributor].lastName,
