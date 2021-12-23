@@ -8,7 +8,7 @@ export default {
   ** Project router
   */
   router: {
-    middleware: ['auth']
+    //middleware: ['auth']
   },
   /*
   ** Headers of the page
@@ -64,7 +64,7 @@ export default {
   ** Auth module configuration
   ** See https://auth.nuxtjs.org/
   */
-  auth: {
+  /*auth: {
     strategies: {
       local: {
         tokenType: '',
@@ -81,7 +81,7 @@ export default {
       logout: '/login',
       home: '/'
     }
-  },
+  },*/
   /*
   ** vuetify module configuration
   ** https://github.com/nuxt-community/vuetify-module
